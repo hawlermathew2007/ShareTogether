@@ -6,6 +6,7 @@ import NavBar from './components/NavBar'
 import Login from './components/Login'
 import Register from './components/Register'
 import Users from './components/Users'
+import Information from './components/Information';
 import Feedback from './components/Feedback';
 import IdPost from './components/IdPost'
 import SearchUser from './components/SearchUser'
@@ -63,6 +64,7 @@ function App() {
           <Route path='/user/edit/*' element={<CreatePost userId={userId} name={userInfo && userInfo.name}/>}/>
           <Route path='/user/:id' element={<Users userId={userId}/>}/>
           <Route path='/post/:id' element={<IdPost userId={userId}/>}/>
+          <Route path='/information' element={<Information/>} />
           <Route path='/feedback' element={<Feedback/>} />
           <Route path='*' element={<Error setError={setError}/>}/>
         </Routes>

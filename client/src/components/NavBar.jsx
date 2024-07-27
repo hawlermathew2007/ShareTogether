@@ -82,7 +82,7 @@ const Navbar = (props) => {
           <li onClick={() => navigate('/')} className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-al cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-house"></i><h1 className='text-fancyDarkGray'>Home</h1></li>
           <li onClick={() => navigate('/user/search')} className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-all cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-user-group"></i><h1 className='text-fancyDarkGray'>Find Someone?</h1></li>
           <li onClick={() => navigate(`/user/${props.userId}`)} className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-al cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-note-sticky"></i><h1 className='text-fancyDarkGray'>Your Post</h1></li>
-          <li className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-all cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-circle-info"></i><h1 className='text-fancyDarkGray'>Your Information</h1></li>
+          <li onClick={() => navigate('/information')} className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-all cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-circle-info"></i><h1 className='text-fancyDarkGray'>Your Information</h1></li>
           <li onClick={() => navigate('/feedback')} className='flex items-center gap-1 text-lg p-2 hover:bg-fancyShadowGray transition-all cursor-pointer'><i className="fancyBlack w-8 fa-solid fa-circle-question"></i><h1 className='text-fancyDarkGray'>Feedback and the Media</h1></li>
         </ol>
         <div className='flex flex-col gap-6 bg-fancyInpGray p-6 rounded-2xl w-[78%] m-auto sticky'>
