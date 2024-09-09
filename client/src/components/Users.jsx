@@ -26,15 +26,25 @@ const Users = ({ userId }) => {
     }
   }
 
+  const objectMap = (obj) => {
+    return Object.entries(obj)
+  }
+
+  const checkFullLink = (obj) => {
+    return Object.values(obj).some((value) => {
+      return value == null || value == ''
+    })
+  }
+
   return (
     <>
       <div className="flex flex-col gap-2 border-x-[1px] max-h-[100vh] overflow-y-auto scrollbar-hide">
         {error ? navigate('/userId/error') : (
           <>
             {userId && id == userId ? (
-              <MainUser userInfo={getUserInfo(id)} />
+              <MainUser userInfo={getUserInfo(id)} objectMap={objectMap} checkFullLink={checkFullLink}/>
             ) : (
-              <OtherUser userInfo={getUserInfo(id)} sessionId={userId}/>
+              <OtherUser userInfo={getUserInfo(id)} sessionId={userId} objectMap={objectMap}/>
             )}
           </>
         )}

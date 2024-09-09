@@ -42,7 +42,17 @@ const userSchema = new mongoose.Schema({
     listOfliked: {
         type: Array,
         default: []
-    },
+    }, 
+    objectOfContactLink : {
+        type: Object, 
+        default: {
+            facebook: null,
+            instagram: null,
+            reddit: null,
+            discord: null,
+            github: null,
+        }
+    }
 })
 
 module.exports = mongoose.model('User', userSchema)

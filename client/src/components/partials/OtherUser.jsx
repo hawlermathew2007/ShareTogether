@@ -3,8 +3,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import UserPost from './user\'s partial/UserPost'
 import UserMessage from './user\'s partial/UserMessage'
+import { socialMediaLogo } from '../data/website'
 
-const OtherUser = ({ userInfo, sessionId }) => {
+
+const OtherUser = (props) => {
 
   const navigate = useNavigate()
 
@@ -12,7 +14,6 @@ const OtherUser = ({ userInfo, sessionId }) => {
   const [numsOfPosts, setNumsOfPosts] = useState(0)
   const [atPostSec, setAtPostSec] = useState(true)
   const [followed, setFollowed] = useState(false)
-
 
   const dateConvertor = (dateString) => {
     const date = new Date(dateString);
@@ -30,8 +31,7 @@ const OtherUser = ({ userInfo, sessionId }) => {
   const userFollowed = async (outcome) => {
     setFollowed(prev => !prev)
     try{
-        console.log('asdasd')
-        const response = await axios.put(`http://localhost:3000/user/${props.sessionId}`, { type: outcome, author: props.author }, {
+        const response = await axios.put(`http://localhost:3000/user/${props.sessionId}`, { type: outcome, author: user && user._id }, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -41,7 +41,7 @@ const OtherUser = ({ userInfo, sessionId }) => {
             return
         }
     } catch(e){
-        console.log('yeah')
+        console.log(e)
         navigate('/error')
     }
   }
@@ -59,22 +59,23 @@ const OtherUser = ({ userInfo, sessionId }) => {
               setFollowed(containsArray(userInfo.listOfFollowed, [user._id, user.name]))
           }
         } catch(e){
+          console.log(e)
           navigate('/userInfo/error')
         }
       }
-      followClarify(sessionId)
+      followClarify(props.sessionId)
     }, [user])
     
     useEffect(() => {
       const fetchUserInfo = async () => {
-      try {
-        const response = await userInfo;
-        setUser(response);
-      } catch (e) {
-        navigate('/userInfo/erro');
-      }
-    };
-    fetchUserInfo();
+        try {
+          const response = await props.userInfo;
+          setUser(response);
+        } catch (e) {
+          navigate('/userInfo/error');
+        }
+      };
+      fetchUserInfo();
   }, []);
   
   return (
@@ -83,11 +84,22 @@ const OtherUser = ({ userInfo, sessionId }) => {
         <div className='relative w-full min-h-48 bg-fancyBlack '>
           <div className='absolute top-[55%] left-[1.5rem] w-[10em] h-[10em] bg-fancyBlack cursor-pointer rounded-full border-4 border-white'></div>
         </div>
-        <button onClick={() => userFollowed('follow')}
-                className={`${followed ? 'shadow-lg shadow-fancyInpGray' : ''} self-end w-fit bg-fancyBlack text-white font-semibold m-4 px-4 py-1 h-fit 
-                    rounded-2xl transition ease-in hover:shadow-lg hover:shadow-fancyInpGray`}>
-                    {followed ? 'Followed' : 'Follow'}
-                </button>
+        <div className='flex gap-2 self-end items-center m-4'>
+          <div className='flex gap-2'>
+            {user && user.objectOfContactLink && props.objectMap(user.objectOfContactLink) ? props.objectMap(user.objectOfContactLink).map((data, index) => {
+                if(data[1] != null && data[1] != ''){
+                  return <div key={index}>
+                    {<a href={data[1]}><img className='w-7 h-7 cursor-pointer bg-white rounded-2xl' src={socialMediaLogo[data[0]]} alt={`${data[0]}Logo`} /></a>}
+                  </div>
+                }
+              }) : '' } {/* add link here */}
+          </div>
+          <button onClick={() => userFollowed('follow')}
+                  className={`${followed ? 'shadow-lg shadow-fancyInpGray' : ''} w-fit bg-fancyBlack text-white font-semibold px-4 py-1 h-fit 
+                      rounded-2xl transition ease-in hover:shadow-lg hover:shadow-fancyInpGray`}>
+                      {followed ? 'Followed' : 'Follow'}
+                  </button>
+        </div>
       </div>
       <div className='flex flex-col gap-4 p-[1.5rem] ml-4'>
         <h1 className='text-2xl font-bold'>{user && user.name}</h1>
@@ -104,7 +116,7 @@ const OtherUser = ({ userInfo, sessionId }) => {
           <button onClick={() => setAtPostSec(true)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray' : 'text-fancyDarkGray p-3 w-full border-b-[2px]'}`}>Posts</button>
           <button onClick={() => setAtPostSec(false)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyDarkGray p-3 w-full border-b-[2px]' : 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray'}`}>Messages</button>
         </div>
-        {atPostSec ? <UserPost userId={user && user._id} sessionId={sessionId} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
+        {atPostSec ? <UserPost userId={user && user._id} sessionId={props.sessionId} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
       </div>
     </>
   )

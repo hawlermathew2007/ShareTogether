@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const Register = () => {
+const Register = (props) => {
 
   const navigate = useNavigate()
 
@@ -16,7 +16,7 @@ const Register = () => {
     if(props && props.userId != null){
       navigate('/')
     }
-  }, [])
+  }, [props.userId])
 
   const register = async (e) => {
     e.preventDefault()
@@ -26,7 +26,7 @@ const Register = () => {
           username: usernameRef.current.value,
           password: passwordRef.current.value,
           birthday: birthdayRef.current.value
-       }, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+       }, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}, withCredentials: true})
       
       if(response.data && response.data.error == null){
         navigate('/login')

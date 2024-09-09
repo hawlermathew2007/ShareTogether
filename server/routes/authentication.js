@@ -15,7 +15,7 @@ passport.use(new localStrategy(
         if (user == null) { return done(null, false, { message: 'No user with that name' }); }
         try {
             if (await bcrypt.compare(password, user.password)) {
-                return done(null, user)
+                return done(null, user) 
             } else{
                 return done(null, false, { message: 'Password incorrect!' })
             }
@@ -24,33 +24,46 @@ passport.use(new localStrategy(
         }
     }
 ));
-passport.serializeUser( (user, done) => done(null, user.id) )   // add the user id to the session
-passport.deserializeUser( (id, done) => {
-    return done(null, getUserById(id))  // get the full information about the user from session and pass it to req.user
-})  
+passport.serializeUser((user, done) => {
+    console.log('serializing');
+    done(null, user.id)
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    console.log('deserializing')
+    const user = await getUserById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 router.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info, status) {
-        if (err) { 
-            return res.json({error: err}) 
+        if (err) {
+            return next(err);
         }
         if(info && info.message != null){
-            return res.json({error: info.message})
+            return res.json({error: info.message});
         }
-        req.logIn(user, function(err) {
-            if (err) { 
-              return res.json({error: err})
+            req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
             }
-            console.log('sucess', req.session.passport.user)
-            return res.json(req.session.passport.user)
+            req.session.touch()
+            req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                return res.json(req.session.passport.user);
+            });
         });
     })(req, res, next);
-})
+});
 
 router.post('/register', async (req, res) => {
     try{
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        console.log(hashedPassword)
         const user = new User({
             name: req.body.username,
             password: hashedPassword,

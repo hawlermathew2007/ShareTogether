@@ -35,6 +35,20 @@ router.get('/info/:id', async (req,res) => {
     }
 })
 
+router.put('/contactLink/:id', async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id)
+        if(user && req.body){
+            user.objectOfContactLink[req.body.type] = req.body.link
+            user.markModified('objectOfContactLink')
+            await user.save()
+            res.json(user.objectOfContactLink)
+        }
+    } catch(e) {
+        console.log(e)
+    }
+})
+
 async function handleFollowRequest(req, res, user, author) {
     const userListOfFollowed = user.listOfFollowed;
     if (containsArray(userListOfFollowed, [author._id, author.name])) {

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import axios from 'axios'
 
+// should have the preview part
+
 const CreatePost = (props) => {
   
   const titleRef = useRef()

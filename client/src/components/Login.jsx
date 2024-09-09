@@ -12,10 +12,13 @@ const Login = (props) => {
   const passwordRef = useRef()
 
   useEffect(() => {
-    if(props && props.userId != null){
+    console.log(props, props.userId, localStorage.getItem('userId'))
+    if(props && props.userId != null && localStorage.getItem('userId') != null){
       navigate('/')
+    } else{
+      props.setUserId(null)
     }
-  }, [])
+  }, [props.userId])
 
   const login = async (e) => {
     e.preventDefault()

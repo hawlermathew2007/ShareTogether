@@ -15,17 +15,20 @@ const methodOverride = require('method-override')
 const passport = require('passport')
 const app = express()
 
-app.use(cors())
+app.use(cors());
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: false })) // let us get the information from the form
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false}))
 app.use(session({ // allow the user to persist across the page
+    cookie: { ephemeral: true }, 
+    cookieName: "session", 
     secret: process.env.SESSION_SECRET,
     resave: false, // should we resave our section variable? if nothing has changed then false
-    saveUninitialized: false // should we save an empty value in the session? if no value then dont save
+    saveUninitialized: false, // should we save an empty value in the session? if no value then dont save
 }))
 app.use(flash())
 app.use(cookieParser())
+app.use(passport.authenticate('session'))
 app.use(passport.session())
 app.use(passport.initialize())
 

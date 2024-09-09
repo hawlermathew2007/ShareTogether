@@ -3,6 +3,18 @@ const User = require('../models/users')
 const Post = require('../models/posts')
 const router = express.Router()
 
+// const isAuthenticated = (req, res, next) => {
+//     console.log(req.isAuthenticated())
+//     if (req.isAuthenticated()) {
+//         return next();
+//     }
+// };
+
+// router.get('/protected', isAuthenticated, (req, res) => {
+//     console.log(req.user); // The user object should be available here
+//     // Your route logic here
+// });
+
 router.get('/info', async (req, res) => {
     let searchOptions = {}
     if(req.query.title != null && req.query.title != ''){
