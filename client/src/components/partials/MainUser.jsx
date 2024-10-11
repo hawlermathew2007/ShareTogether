@@ -67,9 +67,7 @@ const MainUser = ({ userInfo, objectMap, checkFullLink }) => {
   const updateLink = async (type) => {
     try{
       const link = linkRefs[type]?.current.value;
-      console.log(link.includes(`https://www.${type}.com`) == false)
       if(!link.includes(`https://www.${type}.com`)){
-        console.log('error')
         toastr['error']('Please enter a valid link!')
         return
       }
@@ -78,13 +76,11 @@ const MainUser = ({ userInfo, objectMap, checkFullLink }) => {
         link: link,
         
       }, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} })
-      console.log(response)
-      if(response && response.data){
+      if(response?.data){
         toastr['success']('Update Successfully!')
         setContactLinks(response.data)
       }
     } catch(e) {
-      console.log(e)
       toastr['error']('Error! Please try again!')
       navigate('/userInfo/error')
     }
@@ -110,7 +106,7 @@ const MainUser = ({ userInfo, objectMap, checkFullLink }) => {
           <button className='absolute top-[2%] left-[98%] translate-x-[-100%] mr-6' onClick={() => setOpenUpdateLinkBox(prev => !prev)}><i className="fa-solid fa-xmark text-xl text-lavender"></i></button>
           <h1 className='text-xl font-bold uppercase tracking-wide'>Update Alternative Contact Link</h1>
           <div className='flex flex-col gap-2 w-[85%] mb-4'>
-            {user && user.objectOfContactLink && Object.keys(contactLinks) ? Object.keys(contactLinks).map(((media, index) => {
+            {user?.objectOfContactLink && Object.keys(contactLinks) ? Object.keys(contactLinks).map(((media, index) => {
               return <div className='flex gap-6 items-center' key={index}>
                 <div className='flex gap-2 items-center'>
                   <img className='w-5 h-5 cursor-pointer bg-white rounded-2xl' src={socialMediaLogo[media]} alt={`${media}Logo`} />
@@ -128,22 +124,22 @@ const MainUser = ({ userInfo, objectMap, checkFullLink }) => {
           <div className='absolute top-[55%] left-[1.5rem] w-[10em] h-[10em] bg-fancyBlack cursor-pointer rounded-full border-4 border-white'></div>
         </div>
         <div className='w-full flex gap-2 justify-end items-center p-4'>
-          {user && user.objectOfContactLink && objectMap(contactLinks) ? objectMap(contactLinks).map((data, index) => {
+          {user?.objectOfContactLink && objectMap(contactLinks) ? objectMap(contactLinks).map((data, index) => {
             if(data[1] != null && data[1] != ''){
               return <div key={index}>
                 {<a href={data[1]}><img className='w-7 h-7 cursor-pointer bg-white rounded-2xl' src={socialMediaLogo[data[0]]} alt={`${data[0]}Logo`} /></a>}
               </div>
             }
           }) : '' } {/* add link here */}
-          <button onClick={() => setOpenUpdateLinkBox(prev => !prev)} className={`${user && (checkFullLink(user && user.objectOfContactLink) ? '' : 'hidden')} h-fit bg-white rounded-full p-[10px] py-[5px]`}><i className="text-fancyBlack fa-solid fa-plus"></i></button>
+          <button onClick={() => setOpenUpdateLinkBox(prev => !prev)} className={`${user && (checkFullLink(user?.objectOfContactLink) ? '' : 'hidden')} h-fit bg-white rounded-full p-[10px] py-[5px]`}><i className="text-fancyBlack fa-solid fa-plus"></i></button>
         </div>
       </div>
       <div className='flex flex-col gap-4 p-[1.5rem] ml-4'>
-        <h1 className='text-2xl font-bold'>{user && user.name}</h1>
-        <p className={`text-fancyBlack text-lg ${user && user.introduction ? '' : 'hidden'}`}>{user && user.introduction}</p>
+        <h1 className='text-2xl font-bold'>{user?.name}</h1>
+        <p className={`text-fancyBlack text-lg ${user?.introduction ? '' : 'hidden'}`}>{user?.introduction}</p>
         <p className='text-fancyBlack text-lg'>{user && `Join At ${dateConvertor(user.dateCreateAcc)}`}</p>
         <div className='flex gap-10 mb-6'>
-          <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{user && user.numsOfFollowers}</span> <span className='font-light'>Followers</span></h2>
+          <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{user?.numsOfFollowers}</span> <span className='font-light'>Followers</span></h2>
           <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>0</span> <span className='font-light'>Likes</span></h2> {/* get likes by summing all likes from user post */}
           <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{numsOfPosts ? numsOfPosts : '0'}</span> <span className='font-light'>Posts</span></h2>
         </div>
@@ -153,7 +149,7 @@ const MainUser = ({ userInfo, objectMap, checkFullLink }) => {
           <button onClick={() => setAtPostSec(true)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray' : 'text-fancyDarkGray p-3 w-full border-b-[2px]'}`}>Posts</button>
           <button onClick={() => setAtPostSec(false)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyDarkGray p-3 w-full border-b-[2px]' : 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray'}`}>Messages</button>
         </div>
-        {atPostSec ? <UserPost userId={user && user._id} sessionId={user && user._id} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
+        {atPostSec ? <UserPost userId={user?._id} sessionId={user?._id} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
       </div>
     </>
   )

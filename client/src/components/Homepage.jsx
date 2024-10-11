@@ -32,7 +32,6 @@ const Homepage = (props) => {
         setLoadingPost(false);
       }
     });
-
     if (node) observer.current.observe(node);
   }, [loadingPost, hasMore, sectionNo, datas]);
 

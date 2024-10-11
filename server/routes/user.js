@@ -16,7 +16,7 @@ router.get('/info', async (req, res) => {
     try{
         const users = await User.find(searchOptions)
         res.json(users)
-    } catch(e){
+    } catch(e){ 
         console.log(e)
         res.json({error: e})
     }
@@ -81,6 +81,7 @@ async function handleClearTodosRequest(req, res, user) {
     res.json(user.listOfTodos);
 }
 
+// change req.params.id to req.body.author after done
 router.put('/:id', async (req, res) => {
     let user
     let author

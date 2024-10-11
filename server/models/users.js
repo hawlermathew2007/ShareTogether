@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
+    googleId: {
+        type: String,
+        unique: true,
+        default: null
+    },
     name: {
         type: String,
         required: true
@@ -14,7 +19,10 @@ const userSchema = new mongoose.Schema({
     },
     birthday: {
         type: String,
-        required: true
+        default: () => {
+            const now = new Date(Date.now());
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
     },
     dateCreateAcc: {
         type: Date,

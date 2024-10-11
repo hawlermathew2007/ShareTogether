@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production'){
 }
 
 const express = require('express')
+const passport = require('passport')
 const authenticationRoutes = require('./routes/authentication')
 const userRoutes = require('./routes/user')
 const postRoutes = require('./routes/post')
@@ -12,25 +13,27 @@ const cookieParser = require("cookie-parser")
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
-const passport = require('passport')
 const app = express()
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true,
+}));
 app.use(methodOverride('_method'))
+app.use(express.json());
 app.use(express.urlencoded({ extended: false })) // let us get the information from the form
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false}))
-app.use(session({ // allow the user to persist across the page
-    cookie: { ephemeral: true }, 
-    cookieName: "session", 
+app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: false, // should we resave our section variable? if nothing has changed then false
-    saveUninitialized: false, // should we save an empty value in the session? if no value then dont save
-}))
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 24*60*60*100 },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash())
 app.use(cookieParser())
-app.use(passport.authenticate('session'))
-app.use(passport.session())
-app.use(passport.initialize())
 
 const mongoose = require('mongoose')
 mongoose.connect(process.env.DATABASE_URL)
@@ -39,9 +42,20 @@ const db = mongoose.connection
 db.on('error',  error => console.error(error))
 db.once('open',  () => console.log('Connected to mongoose'))
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
 app.get('/logout', (req, res) => {
+    console.log('logging out')
     req.session.destroy()
     res.json({})
+})
+
+app.get('/checkUser', (req, res) => {
+    console.log('loading')
+    console.log(req)
 })
 
 app.use('/', authenticationRoutes)

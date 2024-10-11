@@ -31,12 +31,12 @@ const OtherUser = (props) => {
   const userFollowed = async (outcome) => {
     setFollowed(prev => !prev)
     try{
-        const response = await axios.put(`http://localhost:3000/user/${props.sessionId}`, { type: outcome, author: user && user._id }, {
+        const response = await axios.put(`http://localhost:3000/user/${props.sessionId}`, { type: outcome, author: user?._id }, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
-        if(response.data && response.data.error){
+        if(response?.data?.error){
             navigate('/postInfo/error')
             return
         }
@@ -86,7 +86,7 @@ const OtherUser = (props) => {
         </div>
         <div className='flex gap-2 self-end items-center m-4'>
           <div className='flex gap-2'>
-            {user && user.objectOfContactLink && props.objectMap(user.objectOfContactLink) ? props.objectMap(user.objectOfContactLink).map((data, index) => {
+            {user?.objectOfContactLink && props.objectMap(user.objectOfContactLink) ? props.objectMap(user.objectOfContactLink).map((data, index) => {
                 if(data[1] != null && data[1] != ''){
                   return <div key={index}>
                     {<a href={data[1]}><img className='w-7 h-7 cursor-pointer bg-white rounded-2xl' src={socialMediaLogo[data[0]]} alt={`${data[0]}Logo`} /></a>}
@@ -102,11 +102,11 @@ const OtherUser = (props) => {
         </div>
       </div>
       <div className='flex flex-col gap-4 p-[1.5rem] ml-4'>
-        <h1 className='text-2xl font-bold'>{user && user.name}</h1>
-        <p className={`text-fancyBlack text-lg ${user && user.introduction ? '' : 'hidden'}`}>{user && user.introduction}</p>
+        <h1 className='text-2xl font-bold'>{user?.name}</h1>
+        <p className={`text-fancyBlack text-lg ${user?.introduction ? '' : 'hidden'}`}>{user?.introduction}</p>
         <p className='text-fancyBlack text-lg'>{user && `Join At ${dateConvertor(user.dateCreateAcc)}`}</p>
         <div className='flex gap-10 mb-6'>
-          <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{user && user.numsOfFollowers}</span> <span className='font-light'>Followers</span></h2>
+          <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{user?.numsOfFollowers}</span> <span className='font-light'>Followers</span></h2>
           <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>0</span> <span className='font-light'>Likes</span></h2> {/* get likes by summing all likes from user post */}
           <h2 className='text-fancyBlack text-lg'><span className='font-semibold'>{numsOfPosts ? numsOfPosts : '0'}</span> <span className='font-light'>Posts</span></h2>
         </div>
@@ -116,7 +116,7 @@ const OtherUser = (props) => {
           <button onClick={() => setAtPostSec(true)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray' : 'text-fancyDarkGray p-3 w-full border-b-[2px]'}`}>Posts</button>
           <button onClick={() => setAtPostSec(false)} className={`text-lg transition-all hover:bg-neutral-50 ${atPostSec ? 'text-fancyDarkGray p-3 w-full border-b-[2px]' : 'text-fancyBlack font-semibold p-3 w-full border-b-[3px] border-fancyDarkGray'}`}>Messages</button>
         </div>
-        {atPostSec ? <UserPost userId={user && user._id} sessionId={props.sessionId} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
+        {atPostSec ? <UserPost userId={user?._id} sessionId={props.sessionId} setNumsOfPosts={setNumsOfPosts}/> : <UserMessage/>}
       </div>
     </>
   )

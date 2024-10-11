@@ -11,6 +11,9 @@ export default {
         'fancyDarkGray': '#64748B',
         'fancyBlack': '#0F172A',
         'fancyInpGray': '#CBD5E1'
+      },
+      boxShadow: {
+        'bottomLine': '0 2px 2px #64748B',
       }
     },
   },
