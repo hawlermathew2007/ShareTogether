@@ -16,7 +16,7 @@ router.get('/info', async (req, res) => {
     try{
         const users = await User.find(searchOptions)
         res.json(users)
-    } catch(e){
+    } catch(e){ 
         console.log(e)
         res.json({error: e})
     }
@@ -32,6 +32,20 @@ router.get('/info/:id', async (req,res) => {
         res.json({error: 'No user with this id'})
     } catch(e){
         res.json({error: e})
+    }
+})
+
+router.put('/contactLink/:id', async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id)
+        if(user && req.body){
+            user.objectOfContactLink[req.body.type] = req.body.link
+            user.markModified('objectOfContactLink')
+            await user.save()
+            res.json(user.objectOfContactLink)
+        }
+    } catch(e) {
+        console.log(e)
     }
 })
 
@@ -67,6 +81,7 @@ async function handleClearTodosRequest(req, res, user) {
     res.json(user.listOfTodos);
 }
 
+// change req.params.id to req.body.author after done
 router.put('/:id', async (req, res) => {
     let user
     let author

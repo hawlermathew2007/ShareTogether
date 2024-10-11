@@ -31,8 +31,8 @@ const UserPost = ({ userId, sessionId, setNumsOfPosts }) => {
 
     return (
         <div className='flex flex-col'>
-            {posts && posts.error ? posts.error : 
-            posts && posts.map((post, index) => {
+            {posts?.error ? posts.error : 
+                posts?.map((post, index) => {
                 return (
                 <Post
                     key={index}

@@ -21,9 +21,10 @@ const Post = (props) => {
         const followClarify = async (id) => {
           try{
             const response = await axios.get(`http://localhost:3000/user/info/${id}`)
-            const userInfo = response.data
-            if(response && userInfo){
-                setIsLiked(userInfo.listOfliked.includes(props.id))
+            const userInfo = response?.data
+            // console.log(response?.data?.error, userInfo?.data?.error)
+            if(response?.data?.error != null && userInfo?.data?.error != null){
+                setIsLiked(userInfo?.listOfliked.includes(props.id))
                 setFollowed(containsArray(userInfo.listOfFollowed, [props.author, props.authorName]))
             }
           } catch(e){

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+::selection {
+  color: white;
+  background: #64748B;
+}
+
 .text-shadow {
   text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
 }
@@ -10,16 +15,37 @@
   box-shadow: 0 0 0 2px #64748B;
 }
 
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-text,
+::-webkit-calendar-picker-indicator { 
+  color: #999; 
+}
+
 .fade{
   animation: fade 2.5s ease-in-out;
 }
-  
+
+.show-up{
+  animation: show-up 500ms ease-out;
+}
+
 .zoom-in{
   animation: zoom-in 0.2s ease-in-out;
 }
 
 .zoom-out{
   animation: zoom-out 0.2s ease-in-out;
+}
+
+@keyframes my-animation {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes fade {
@@ -31,6 +57,17 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes show-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
   }
 }
 

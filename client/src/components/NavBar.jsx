@@ -10,6 +10,7 @@ const Navbar = (props) => {
   const todoRef = useRef()
 
   const [listOfTodos, setListOfTodos] = useState([])
+  const [allowShowTodo, setAllowShowTodo] = useState(true)
 
   useEffect(() => {
     setListOfTodos(props.userInfo && props.userInfo.listOfTodos)
@@ -21,6 +22,10 @@ const Navbar = (props) => {
     }
   }
 
+  const showTodo = () => {
+    setAllowShowTodo(prev => !prev)
+  }
+
   const addTodo = async () => {
     if(!todoRef.current.value){ 
       return
@@ -29,10 +34,12 @@ const Navbar = (props) => {
     try{
       await axios.put(`http://localhost:3000/user/${props.userId}`, { type: 'addTodo', todo: todoRef.current.value }, {
         headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      setAllowShowTodo(true)
     } catch(e){
+      console.log(e)
       navigate('/userInfo/error')
     }
   }
@@ -47,6 +54,7 @@ const Navbar = (props) => {
         setListOfTodos(response.data)
       }
     } catch(e){
+      console.log(e)
       navigate('/userInfo/error')
     }
   }
@@ -60,6 +68,7 @@ const Navbar = (props) => {
       }
     })
     } catch(e){
+      console.log(e)
       navigate('userInfo/error')
     }
   }
@@ -96,10 +105,10 @@ const Navbar = (props) => {
         <div className='flex flex-col w-[78%] border-2 border-fancyInpGray m-auto rounded'>
           <div className='flex justify-between p-4 px-6'>
             <h1 className='text-xl font-semibold italic'>Todo List</h1>
-            <button><i className="fa-solid fa-caret-down"></i></button>
+            <button onClick={() => showTodo()}><i className={`fa-solid fa-caret-down transition-all ${allowShowTodo ? 'rotate-180' : 'rotate-0'}`}></i></button>
           </div>
-          <div className='max-h-[185px] bg-fancyInpGray overflow-y-auto pt-[.2px] pb-[.4px]'>
-            {listOfTodos && listOfTodos.length > 0 ? listOfTodos.map((todo, index) => {
+          <div className={`transition-all ${ allowShowTodo ? 'max-h-[185px]' : 'max-h-0'} bg-fancyInpGray overflow-y-auto pt-[.2px] pb-[.4px]`}>
+            {listOfTodos?.length > 0 ? listOfTodos.map((todo, index) => {
               return <div key={index} className='flex items-center gap-6 bg-fancyShadowGray p-4 px-6 my-[1px]'>
               <button onClick={() => deleteTodo(todo)} className='bg-white w-4 h-4 rounded-full shadow-rounded'></button>
               <h2 className='text-lg font-semibold'>{todo}</h2>
